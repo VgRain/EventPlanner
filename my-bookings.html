@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="dashboard-container">
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebarMenu">
+  <h2>Event Planner</h2>
+  <div id="menuLinks">
+    <a href="index.html">Home</a>
+    <a href="venue-booking.html">Venue Booking</a>
+    <a href="event-list.html">Event List</a>
+    <a href="audience-list.html">Audience List</a>
+    <a href="reports.html">Reports</a>
+    <a href="users.html">Users</a>
+    <a href="settings.html">Settings</a>
+  </div>
+
+  <!-- Logout button pinned at the bottom -->
+  <div class="logout-section">
+    <a href="#" id="logoutBtn">Logout</a>
+  </div>
+</div>
+
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container">
+      <h2>My Bookings</h2>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Venue</th>
+              <th>Location</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="myBookings">
+            <!-- User's bookings will appear here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const myBookings = document.getElementById("myBookings");
+
+    let bookings = JSON.parse(localStorage.getItem("venues")) || [];
+
+    function renderBookings() {
+      myBookings.innerHTML = "";
+      bookings.forEach(booking => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${booking.name}</td>
+          <td>${booking.location}</td>
+          <td>${booking.date}</td>
+        `;
+        myBookings.appendChild(row);
+      });
+    }
+
+    renderBookings();
+
+
+  document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default link behavior
+
+    // Optionally: Clear session or local storage
+    sessionStorage.clear();
+    localStorage.clear();
+
+    // Redirect to login page
+    window.location.href = 'login.html'; // Change this to your login page path
+  });
+</script>
+
+</body>
+</html>

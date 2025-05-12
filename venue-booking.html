@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Venue Booking List</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    .sidebar {
+  width: 250px;
+  background-image: url('assets/images/sidebar-bg.jpg'); /* <-- Replace with your image path */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: white;
+  padding: 20px;
+  height: 100%;
+  position: fixed;
+}
+
+    .sidebar h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: white;
+    }
+
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .logout-section {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+    .content {
+      margin-left: 270px;
+      padding: 20px;
+      width: calc(100% - 270px);
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      font-size: 28px;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+
+    select, button {
+      padding: 8px 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .action-btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .action-btn:hover {
+      background-color: #2980b9;
+    }
+
+    .table-controls {
+      margin-bottom: 20px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Event Planner</h2>
+    <a href="index.html">Home</a>
+    <a href="venue-booking.html">Venue Booking</a>
+    <a href="event-list.html">Event List</a>
+    <a href="audience-list.html">Audience List</a>
+    <a href="reports.html">Reports</a>
+    <a href="users.html">Users</a>
+    <a href="settings.html">Settings</a>
+    <div class="logout-section" style="margin-top: auto;">
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="container">
+      <h2>Venue Booking List</h2>
+
+      <div class="table-controls">
+        Show 
+        <select id="entriesCount">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+        </select> entries
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Booking Info</th>
+            <th>Customer Info</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="bookingTableBody">
+          <!-- Example static row -->
+          <tr>
+            <td>Grand Hall, New York, 2025-06-10, Conference</td>
+            <td>John Doe, johndoe@example.com</td>
+            <td>
+              <select>
+                <option>Confirmed</option>
+                <option>Not Confirmed</option>
+              </select>
+            </td>
+            <td><button class="action-btn">Edit</button></td>
+          </tr>
+          <!-- More rows can be added dynamically -->
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+<script>
+  document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default link behavior
+
+    // Optionally: Clear session or local storage
+    sessionStorage.clear();
+    localStorage.clear();
+
+    // Redirect to login page
+    window.location.href = 'login.html'; // Change this to your login page path
+  });
+</script>
+</body>
+</html>

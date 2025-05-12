@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Event Audience List</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    .sidebar {
+  width: 250px;
+  background-image: url('assets/images/sidebar-bg.jpg'); /* <-- Replace with your image path */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: white;
+  padding: 20px;
+  height: 100%;
+  position: fixed;
+}
+
+    .sidebar h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: white;
+    }
+
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .logout-section {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+    .content {
+      margin-left: 270px;
+      padding: 20px;
+      width: calc(100% - 270px);
+      background-color: white;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      margin-bottom: 15px;
+    }
+
+    .controls label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .controls select {
+      padding: 5px 10px;
+      font-size: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+
+    button.edit-btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button.edit-btn:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Event Planner</h2>
+    <a href="index.html">Home</a>
+    <a href="venue-booking.html">Venue Booking</a>
+    <a href="event-list.html">Event List</a>
+    <a href="audience-list.html">Audience List</a>
+    <a href="reports.html">Reports</a>
+    <a href="users.html">Users</a>
+    <a href="settings.html">Settings</a>
+    <div class="logout-section">
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="container">
+      <h2>Event Audience List</h2>
+
+      <div class="controls">
+        <label for="entriesSelect">Show entries:</label>
+        <select id="entriesSelect">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Event Information</th>
+              <th>Audience Information</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="audienceTableBody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const audienceData = [
+      {
+        event: "Tech Conference 2025",
+        audience: "Alice Johnson - alice@example.com",
+        status: "Confirmed"
+      },
+      {
+        event: "Wedding Gala",
+        audience: "Bob Smith - bob@example.com",
+        status: "Not Confirmed"
+      },
+      {
+        event: "Startup Meetup",
+        audience: "Charlie White - charlie@example.com",
+        status: "Confirmed"
+      },
+      {
+        event: "Seminar on AI",
+        audience: "David Lee - david@example.com",
+        status: "Not Confirmed"
+      },
+      {
+        event: "Music Fest",
+        audience: "Ella Brown - ella@example.com",
+        status: "Confirmed"
+      }
+    ];
+
+    const entriesSelect = document.getElementById("entriesSelect");
+    const tableBody = document.getElementById("audienceTableBody");
+
+    function renderTable(limit) {
+      tableBody.innerHTML = "";
+      audienceData.slice(0, limit).forEach((entry, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${entry.event}</td>
+          <td>${entry.audience}</td>
+          <td>${entry.status}</td>
+          <td><button class="edit-btn" onclick="editRow(${index})">Edit</button></td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function editRow(index) {
+      alert("Edit functionality for row " + (index + 1));
+    }
+
+    entriesSelect.addEventListener("change", () => {
+      renderTable(parseInt(entriesSelect.value));
+    });
+
+    // Initial load
+    renderTable(parseInt(entriesSelect.value));
+  
+  
+  document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default link behavior
+
+    // Optionally: Clear session or local storage
+    sessionStorage.clear();
+    localStorage.clear();
+
+    // Redirect to login page
+    window.location.href = 'login.html'; // Change this to your login page path
+  });
+
+  </script>
+
+</body>
+</html>

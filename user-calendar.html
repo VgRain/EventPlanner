@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Calendar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    background: #f0f2f5;
+  }
+
+  .sidebar {
+    width: 250px;
+    background-image: url('assets/images/sidebar-bg.jpg'); /* Add background image */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: white;
+    padding: 20px;
+    height: 100%;
+    position: fixed;
+  }
+
+  .sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: white;
+  }
+
+  .sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 18px;
+  }
+
+  .sidebar a:hover {
+    background-color: #495057;
+  }
+
+  .logout-section {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .content {
+    margin-left: 270px;
+    padding: 20px;
+    width: calc(100% - 270px);
+    background-image: url('assets/images/background.jpg'); /* Set content background */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #000; /* Optional: adjust text color for readability */
+  }
+
+  #calendar {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .form-container {
+    margin-top: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  input, textarea, button {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+
+  button {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #0056b3;
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+  }
+
+  .modal-content {
+    background: url('assets/images/background.jpeg') no-repeat center center/cover;
+    margin: 10% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  .close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+  }
+
+  .close:hover {
+    color: #ccc;
+  }
+
+  .event-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .event-actions button {
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .edit-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+  }
+
+  .edit-btn:hover {
+    background: #0056b3;
+  }
+
+  .delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+  }
+
+  .delete-btn:hover {
+    background: #c82333;
+  }
+
+  /* Form input adjustments */
+  input, textarea {
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: #333;
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0,123,255,0.5);
+  }
+</style>
+
+</head>
+<body>
+  <div class="sidebar">
+  <h2>Event Planner</h2>
+  <a href="user-calendar.html">My Calendar</a>
+  <a href="homepage.html">Home Page</a>
+  <a href="user-events.html">View Events</a>
+  <a href="settings-profile.html">Settings</a>
+  <a href="#" id="logoutBtn">Logout</a>
+</div>
+
+  <div class="content">
+    <h2>My Calendar</h2>
+    <div id="calendar"></div>
+
+    <div class="form-container">
+      <h3>Add Event</h3>
+      <form id="eventForm">
+        <input type="text" id="eventTitle" placeholder="Title" required />
+        <input type="date" id="eventDate" required />
+        <textarea id="eventDesc" placeholder="Description"></textarea>
+        <button type="submit">Add Event</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal for editing -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeEditModal">&times;</span>
+      <h3>Edit Event</h3>
+      <form id="editEventForm">
+        <input type="text" id="editTitle" required />
+        <input type="date" id="editDate" required />
+        <textarea id="editDesc"></textarea>
+        <button type="submit">Save Changes</button>
+      </form>
+
+      <div class="event-actions">
+        <button class="edit-btn" id="editBtn">Edit</button>
+        <button class="delete-btn" id="deleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    let calendar;
+    let selectedEventId = null;
+
+    function getEvents() {
+      return JSON.parse(localStorage.getItem('userEvents') || '[]');
+    }
+
+    function saveEvents(events) {
+      localStorage.setItem('userEvents', JSON.stringify(events));
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+        initialView: 'dayGridMonth',
+        events: getEvents(),
+        eventClick: function(info) {
+          const event = info.event;
+          selectedEventId = event.id;
+
+          document.getElementById('editTitle').value = event.title;
+          document.getElementById('editDate').value = event.startStr;
+          document.getElementById('editDesc').value = event.extendedProps.description || '';
+          document.getElementById('editModal').style.display = 'block';
+        }
+      });
+      calendar.render();
+    });
+
+    // Add event
+    document.getElementById('eventForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = document.getElementById('eventTitle').value;
+      const date = document.getElementById('eventDate').value;
+      const desc = document.getElementById('eventDesc').value;
+
+      const newEvent = {
+        id: String(Date.now()),
+        title: title,
+        start: date,
+        description: desc
+      };
+
+      const events = getEvents();
+      events.push(newEvent);
+      saveEvents(events);
+
+      calendar.addEvent(newEvent);
+      this.reset();
+    });
+
+    // Edit event
+    document.getElementById('editEventForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = document.getElementById('editTitle').value;
+      const date = document.getElementById('editDate').value;
+      const desc = document.getElementById('editDesc').value;
+
+      const events = getEvents();
+      const eventIndex = events.findIndex(event => event.id === selectedEventId);
+
+      if (eventIndex !== -1) {
+        events[eventIndex].title = title;
+        events[eventIndex].start = date;
+        events[eventIndex].description = desc;
+
+        saveEvents(events);
+        calendar.getEventById(selectedEventId).setProp('title', title);
+        calendar.getEventById(selectedEventId).setStart(date);
+        calendar.getEventById(selectedEventId).setExtendedProp('description', desc);
+        document.getElementById('editModal').style.display = 'none';
+      }
+    });
+
+    // Delete event
+    document.getElementById('deleteBtn').addEventListener('click', function() {
+      const events = getEvents();
+      const eventIndex = events.findIndex(event => event.id === selectedEventId);
+
+      if (eventIndex !== -1) {
+        events.splice(eventIndex, 1);
+        saveEvents(events);
+        calendar.getEventById(selectedEventId).remove();
+        document.getElementById('editModal').style.display = 'none';
+      }
+    });
+
+    // Close the modal
+    document.getElementById('closeEditModal').addEventListener('click', function() {
+      document.getElementById('editModal').style.display = 'none';
+    });
+  </script>
+</body>
+</html>

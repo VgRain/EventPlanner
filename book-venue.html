@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Venue</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    /* Sidebar and Content Styling */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    .sidebar {
+  width: 250px;
+  background-image: url('assets/images/sidebar-bg.jpg'); /* <-- Replace with your image path */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: white;
+  padding: 20px;
+  height: 100%;
+  position: fixed;
+}
+
+    .sidebar h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: white;
+    }
+
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .logout-section {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+    .content {
+      margin-left: 270px;
+      padding: 20px;
+      width: calc(100% - 270px);
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      font-size: 28px;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 16px;
+      color: #7f8c8d;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"], input[type="date"], input[type="number"] {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    select {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 12px;
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #27ae60;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebarMenu">
+  <h2>Event Planner</h2>
+  <div id="menuLinks">
+    <a href="index.html">Home</a>
+    <a href="venue-booking.html">Venue Booking</a>
+    <a href="event-list.html">Event List</a>
+    <a href="audience-list.html">Audience List</a>
+    <a href="reports.html">Reports</a>
+    <a href="users.html">Users</a>
+    <a href="settings.html">Settings</a>
+  </div>
+
+  <!-- Logout button pinned at the bottom -->
+  <div class="logout-section">
+    <a href="#" id="logoutBtn">Logout</a>
+  </div>
+</div>
+
+
+  <!-- Content -->
+  <div class="content" id="contentArea">
+    <div class="container">
+      <h2>Book a Venue</h2>
+      <form id="venueBookingForm">
+        <div class="form-group">
+          <label for="venueName">Venue Name</label>
+          <input type="text" id="venueName" placeholder="Enter venue name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="venueLocation">Venue Location</label>
+          <input type="text" id="venueLocation" placeholder="Enter venue location" required />
+        </div>
+
+        <div class="form-group">
+          <label for="bookingDate">Booking Date</label>
+          <input type="date" id="bookingDate" required />
+        </div>
+
+        <div class="form-group">
+          <label for="numberOfPeople">Number of People</label>
+          <input type="number" id="numberOfPeople" placeholder="Enter number of people" required />
+        </div>
+
+        <div class="form-group">
+          <label for="eventType">Event Type</label>
+          <select id="eventType" required>
+            <option value="">Select Event Type</option>
+            <option value="Conference">Conference</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Seminar">Seminar</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <button type="submit">Book Venue</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Handle form submission
+    const form = document.getElementById("venueBookingForm");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const venueName = document.getElementById("venueName").value.trim();
+      const venueLocation = document.getElementById("venueLocation").value.trim();
+      const bookingDate = document.getElementById("bookingDate").value.trim();
+      const numberOfPeople = document.getElementById("numberOfPeople").value.trim();
+      const eventType = document.getElementById("eventType").value;
+
+      if (venueName && venueLocation && bookingDate && numberOfPeople && eventType) {
+        const bookingDetails = {
+          venueName,
+          venueLocation,
+          bookingDate,
+          numberOfPeople,
+          eventType
+        };
+
+        // You can save this information to localStorage or send it to a backend
+        localStorage.setItem("venueBooking", JSON.stringify(bookingDetails));
+
+        alert("Venue booked successfully!");
+
+        // Reset the form
+        form.reset();
+      } else {
+        alert("Please fill out all fields.");
+      }
+    });
+    
+  document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default link behavior
+
+    // Optionally: Clear session or local storage
+    sessionStorage.clear();
+    localStorage.clear();
+
+    // Redirect to login page
+    window.location.href = 'login.html'; // Change this to your login page path
+  });
+</script>
+  
+
+</body>
+</html>

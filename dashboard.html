@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    /* Basic styling for sidebar and content */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      margin: 0;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #343a40;
+      color: white;
+      padding: 20px;
+      height: 100%;
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      transition: all 0.3s;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .sidebar a img {
+      width: 25px;
+      margin-right: 10px;
+    }
+    .content {
+      margin-left: 270px;
+      padding: 20px;
+      width: 100%;
+    }
+    .logout-btn {
+      background-color: #dc3545;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+    .logout-btn:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar" id="sidebarMenu">
+    <h2>Event Planner</h2>
+    <div id="menuLinks">
+      <!-- Links will be injected here based on the role -->
+    </div>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </div>
+
+  <div class="content" id="contentArea">
+    <h1>Welcome to the Dashboard!</h1>
+    <p id="userGreeting">Loading...</p>
+  </div>
+
+  <script>
+    // Get user role from localStorage
+    const role = localStorage.getItem("role");
+    const username = localStorage.getItem("username");
+
+    // Redirect to login if no user is authenticated
+    if (!role || !username) {
+      window.location.href = "login.html";
+    } else {
+      // Show welcome message
+      document.getElementById("userGreeting").innerText = `Welcome, ${username}!`;
+
+      // Show different menus based on role
+      const menuLinks = document.getElementById("menuLinks");
+      if (role === "admin") {
+        menuLinks.innerHTML = `
+          <a href="index.html">< alt="Home">Home</a>
+          <a href="venue-booking.html">< alt="Venue Booking">Venue Booking</a>
+          <a href="event-list.html">< alt="Event List">Event List</a>
+          <a href="audience-list.html">< alt="Audience List">Audience List</a>
+          <a href="reports.html">< alt="Reports">Reports</a>
+          <a href="users.html">< alt="Users">Users</a>
+          <a href="settings.html">< alt="Settings">Settings</a>
+        `;
+      } else if (role === "user") {
+        menuLinks.innerHTML = `
+          <a href="calendar.html">< alt="Calendar">Calendar</a>
+          <a href="book-venue.html">< alt="Book Venue">Book Venue</a>
+          <a href="audience-list.html">< alt="Audience List">Audience List</a>
+        `;
+      }
+    }
+
+    // Logout functionality
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", function () {
+      // Clear local storage and redirect to login page
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+event-planner/
+│
+├── assets/
+│   ├── images/          # Store venue images here
+│   └── css/             # Store CSS files here
+│       └── styles.css   # General styling
+│
+├── js/
+│   ├── login.js         # Login functionality
+│   ├── dashboard.js     # Dashboard JS
+│   └── calendar.js      # FullCalendar JS
+│
+├── data/
+│   └── holidays.json    # Mock holiday data for the calendar
+│
+├── index.html           # Home Page
+├── login.html           # Login Page
+├── dashboard.html       # Admin Dashboard
+└── calendar.html        # Calendar Page
