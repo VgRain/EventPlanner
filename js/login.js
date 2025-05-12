@@ -31,7 +31,7 @@ loginForm.addEventListener("submit", function (e) {
 
     // Redirect based on role
     if (user.role === "admin") {
-      window.location.href = "index.html"; // Admin dashboard
+      window.location.href = "home.html"; // Admin dashboard
     } else if (user.role === "user") {
       window.location.href = "user-calendar.html"; // User calendar page
     }
